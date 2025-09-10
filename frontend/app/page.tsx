@@ -1,103 +1,270 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { Code, Github, Twitter, Linkedin } from "lucide-react";
+import NavbarPage from "@/components/Navbar";
+import HeroSection from "@/components/HeroSection";
+import { HoverEffect } from "@/components/ui/card-hover-effect";
+import { useRouter } from "next/navigation";
+
+const CheatDevLanding = () => {
+  const router = useRouter();
+
+  const navItems = [
+    {
+      name: "Languages",
+      link: "#languages",
+    },
+    {
+      name: "CheatSheets",
+      link: "#cheatSheets",
+    },
+    {
+      name: "Favorites",
+      link: "#favorites",
+    },
+    {
+      name: "Profile",
+      link: "#profile",
+    },
+  ];
+
+  const featuredCheatSheets = [
+    {
+      title: "Python Basics",
+      description: "Essential syntax and functions",
+      language: "Python",
+      favorites: 1240,
+    },
+    {
+      title: "JavaScript Essentials",
+      description: "Modern JS and async patterns",
+      language: "JavaScript",
+      favorites: 890,
+    },
+    {
+      title: "SQL Queries",
+      description: "Database operations and joins",
+      language: "SQL",
+      favorites: 675,
+    },
+    {
+      title: "Git Commands",
+      description: "Version control workflows",
+      language: "Git",
+      favorites: 1100,
+    },
+    {
+      title: "React Hooks",
+      description: "Complete hooks reference",
+      language: "React",
+      favorites: 950,
+    },
+    {
+      title: "CSS Grid",
+      description: "Modern layout techniques",
+      language: "CSS",
+      favorites: 720,
+    },
+  ];
+
+  const languages = [
+    { name: "Python", count: "240+" },
+    { name: "JavaScript", count: "180+" },
+    { name: "HTML", count: "120+" },
+    { name: "SQL", count: "95+" },
+    { name: "Git", count: "85+" },
+    { name: "React", count: "150+" },
+    { name: "Node.js", count: "110+" },
+    { name: "TypeScript", count: "90+" },
+  ];
+
+  const login = () => {
+    router.push("/login");
+  };
+
+  const signUp = () => {
+    router.push("/signup");
+  };
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-white">
+      {/* Navbar */}
+      <NavbarPage navItems={navItems} onLogin={login} onSignUp={signUp} />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Hero Section */}
+      <HeroSection />
+
+      {/* Featured Cheat Sheets */}
+      <section id="cheatsheets" className="py-10 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-10">
+            <h2 className="text-3xl font-bold text-black mb-4">
+              Popular Cheat Sheets
+            </h2>
+            <p className="text-gray-600">Most loved by the community</p>
+          </div>
+
+          <HoverEffect items={featuredCheatSheets} />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      {/* Explore by Language */}
+      <section id="languages" className="py-16 px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold text-black mb-4">
+              Explore by Language
+            </h2>
+            <p className="text-gray-600">Find cheat sheets for your stack</p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {languages.map((lang, index) => (
+              <div
+                key={index}
+                className="bg-white border border-gray-200 p-6 rounded-lg hover:border-gray-300 transition-colors cursor-pointer text-center"
+              >
+                <h3 className="font-semibold text-black mb-1">{lang.name}</h3>
+                <p className="text-sm text-gray-500">{lang.count} sheets</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-16 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-black mb-4">How It Works</h2>
+            <p className="text-gray-600">Three simple steps</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center mx-auto mb-6">
+                <span className="text-white font-bold">1</span>
+              </div>
+              <h3 className="text-lg font-semibold text-black mb-3">Browse</h3>
+              <p className="text-gray-600 text-sm">
+                Find cheat sheets by language or topic
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center mx-auto mb-6">
+                <span className="text-white font-bold">2</span>
+              </div>
+              <h3 className="text-lg font-semibold text-black mb-3">Save</h3>
+              <p className="text-gray-600 text-sm">
+                Mark favorites for quick access
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center mx-auto mb-6">
+                <span className="text-white font-bold">3</span>
+              </div>
+              <h3 className="text-lg font-semibold text-black mb-3">Create</h3>
+              <p className="text-gray-600 text-sm">Share your own snippets</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Community Section */}
+      <section className="py-16 px-6 bg-black">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">
+            Join Our Community
+          </h2>
+          <p className="text-gray-400 mb-8">
+            Thousands of developers sharing knowledge
+          </p>
+
+          <button className="bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors">
+            Sign Up Free
+          </button>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 px-6 border-t border-gray-100">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Logo and Description */}
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                  <Code className="w-4 h-4 text-white" />
+                </div>
+                <span className="text-xl font-semibold text-black">
+                  CheatDev
+                </span>
+              </div>
+              <p className="text-gray-600 text-sm">
+                The platform for developer cheat sheets
+              </p>
+            </div>
+
+            {/* Links */}
+            <div>
+              <div className="space-y-2">
+                <a
+                  href="#about"
+                  className="block text-gray-600 hover:text-black transition-colors text-sm"
+                >
+                  About
+                </a>
+                <a
+                  href="#privacy"
+                  className="block text-gray-600 hover:text-black transition-colors text-sm"
+                >
+                  Privacy
+                </a>
+                <a
+                  href="#terms"
+                  className="block text-gray-600 hover:text-black transition-colors text-sm"
+                >
+                  Terms
+                </a>
+              </div>
+            </div>
+
+            {/* Social Links */}
+            <div className="md:text-right">
+              <div className="flex space-x-4 md:justify-end">
+                <a
+                  href="#"
+                  className="text-gray-600 hover:text-black transition-colors"
+                >
+                  <Github className="w-5 h-5" />
+                </a>
+                <a
+                  href="#"
+                  className="text-gray-600 hover:text-black transition-colors"
+                >
+                  <Twitter className="w-5 h-5" />
+                </a>
+                <a
+                  href="#"
+                  className="text-gray-600 hover:text-black transition-colors"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-100 mt-8 pt-8 text-center">
+            <p className="text-gray-500 text-sm">
+              © 2025 CheatDev. All rights reserved.
+            </p>
+          </div>
+        </div>
       </footer>
     </div>
   );
-}
+};
+
+export default CheatDevLanding;
