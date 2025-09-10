@@ -2,17 +2,67 @@
 
 import { BottomGradient } from "@/components/BottomGradient";
 import { LabelInputContainer } from "@/components/LabelContainer";
-import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { signup } from "@/server/api";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import z from "zod";
 
-const page = () => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form submitted");
-  };
+const formSchema = z
+  .object({
+    first_name: z.string().min(2, "First name must be at least 2 characters"),
+    last_name: z.string().min(2, "Last name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    re_password: z.string().min(6, "Password confirmation required"),
+  })
+  .refine((data) => data.password === data.re_password, {
+    path: ["re_password"],
+    message: "Password do not match",
+  });
+
+const SignUpPage = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      first_name: "",
+      last_name: "",
+      email: "",
+      password: "",
+      re_password: "",
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const result = await signup(values);
+      if (result) {
+        toast.success("Sign Up Successfully");
+        router.push("/login");
+      }
+      setLoading(true);
+    } catch (error) {
+      console.error("Login failed", error);
+      toast.error(error instanceof Error ? error.message : "Failed to login");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center w-full px-4">
@@ -27,53 +77,114 @@ const page = () => {
           ratione.
         </p>
 
-        <form className="my-8" onSubmit={handleSubmit}>
-          <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
-            <LabelInputContainer>
-              <Label htmlFor="firstname">First name</Label>
-              <Input id="firstname" placeholder="Tyler" type="text" />
-            </LabelInputContainer>
-            <LabelInputContainer>
-              <Label htmlFor="lastname">Last name</Label>
-              <Input id="lastname" placeholder="Durden" type="text" />
-            </LabelInputContainer>
-          </div>
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="email">Email Address</Label>
-            <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
-          </LabelInputContainer>
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" placeholder="••••••••" type="password" />
-          </LabelInputContainer>
-          <LabelInputContainer className="mb-8">
-            <Label htmlFor="re_password">Confirm password</Label>
-            <Input id="re_password" placeholder="••••••••" type="re_password" />
-          </LabelInputContainer>
-
-          <button
-            className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
-            type="submit"
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8 mt-10"
           >
-            Sign Up &rarr;
-            <BottomGradient />
-          </button>
+            <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
+              <LabelInputContainer>
+                <FormField
+                  control={form.control}
+                  name="first_name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Tyler" {...field} type="text" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </LabelInputContainer>
+              <LabelInputContainer>
+                <FormField
+                  control={form.control}
+                  name="last_name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Durden" {...field} type="text" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </LabelInputContainer>
+            </div>
+            <LabelInputContainer className="mb-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="projectmayhem@fc.com" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </LabelInputContainer>
+            <LabelInputContainer className="mb-4">
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input placeholder="*******" {...field} type="password" />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </LabelInputContainer>
+            <LabelInputContainer className="mb-8">
+              <FormField
+                control={form.control}
+                name="re_password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input placeholder="*******" {...field} type="password" />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </LabelInputContainer>
 
-          <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
-
-          <p className="text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link
-              href="/login"
-              className="font-semibold text-primary hover:underline hover:text-primary/80 transition-colors"
+            <button
+              className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] cursor-pointer"
+              type="submit"
             >
-              Login
-            </Link>
-          </p>
-        </form>
+              {loading ? (
+                <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+              ) : (
+                <span>
+                  Sign Up &rarr;
+                  <BottomGradient />
+                </span>
+              )}
+            </button>
+
+            <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
+
+            <p className="text-center text-sm text-muted-foreground">
+              Already have an account?{" "}
+              <Link
+                href="/login"
+                className="font-semibold text-primary hover:underline hover:text-primary/80 transition-colors"
+              >
+                Login
+              </Link>
+            </p>
+          </form>
+        </Form>
       </div>
     </div>
   );
 };
 
-export default page;
+export default SignUpPage;
