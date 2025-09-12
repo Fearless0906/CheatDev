@@ -7,6 +7,7 @@ import {
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { authService } from "@/services/authService";
 import { getErrorMessage } from "@/lib/helper";
+import Cookies from "js-cookie";
 
 const loadInitialState = (): authState => {
   return {
@@ -144,6 +145,11 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    reset: (state) => {
+      state.loading = false;
+      state.error = null;
+      state.success = false;
+    },
     start: (state) => {
       state.loading = true;
       state.error = null;
@@ -153,6 +159,12 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.token = action.payload.token;
       localStorage.setItem("token", action.payload.token);
+
+      Cookies.set("token", action.payload.token, {
+        expires: 1,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+      });
     },
     failure: (state, action: PayloadAction<string>) => {
       state.loading = false;
@@ -185,6 +197,19 @@ const authSlice = createSlice({
       state.loading = false;
       state.success = true;
     },
+    hydrate: (state) => {
+      if (typeof window === "undefined") return;
+      const token = Cookies.get("token");
+      const userData = localStorage.getItem("user");
+
+      if (token) {
+        state.token = token;
+        state.isAuthenticated = true;
+      }
+      if (userData) {
+        state.user = JSON.parse(userData);
+      }
+    },
   },
 });
 
@@ -193,10 +218,12 @@ export const {
   success,
   failure,
   logout,
+  reset,
   setUser,
   signupSuccess,
   activateSuccess,
   activationFailure,
   resetPasswordSuccess,
+  hydrate,
 } = authSlice.actions;
 export default authSlice.reducer;

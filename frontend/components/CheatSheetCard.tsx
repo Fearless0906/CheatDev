@@ -11,7 +11,6 @@ type SheetCardProps = {
 };
 
 const CheatSheetCard = ({
-  id,
   color,
   title,
   language,
@@ -22,11 +21,11 @@ const CheatSheetCard = ({
       <div className="flex items-start justify-between mb-4">
         <div className={`w-3 h-3 rounded-full ${color}`}></div>
         <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-2">
-          <Button className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
-            <Edit3 size={14} className="text-gray-600 dark:text-gray-400" />
+          <Button variant="ghost">
+            <Edit3 size={14} />
           </Button>
-          <Button className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
-            <Trash2 size={14} className="text-gray-600 dark:text-gray-400" />
+          <Button variant="ghost">
+            <Trash2 size={14} />
           </Button>
         </div>
       </div>

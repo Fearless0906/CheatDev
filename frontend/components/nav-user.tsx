@@ -24,6 +24,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useDispatch } from "react-redux";
+import { Dispatch } from "@/store/store";
+import { logout, reset } from "@/slices/authSlice";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export function NavUser({
   user,
@@ -36,6 +41,8 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const dispatch = useDispatch<Dispatch>();
+  const router = useRouter();
 
   const name = `${user.first_name} ${user.last_name}`;
 
@@ -48,6 +55,22 @@ export function NavUser({
       );
     }
     return user?.email?.slice(0, 2).toUpperCase() || "U";
+  };
+
+  const Logout = () => {
+    try {
+      dispatch(logout());
+      dispatch(reset());
+      toast.success("Log out successflly");
+      router.push("/");
+    } catch (error) {
+      toast.error("Logout failed! Please try again.");
+      throw new Error(
+        `Failed to logout! ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+    }
   };
 
   return (
@@ -112,7 +135,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={Logout}>
               <IconLogout />
               Log out
             </DropdownMenuItem>
