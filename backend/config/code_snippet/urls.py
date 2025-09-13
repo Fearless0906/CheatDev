@@ -17,11 +17,6 @@ urlpatterns = [
     # Tags
     path("tags/", views.TagListCreateView.as_view(), name="tag-list"),
     path("tags/<str:pk>/", views.TagDetailView.as_view(), name="tag-detail"),
-
-    # SnippetTags
-    path("snippet-tags/", views.SnippetTagListCreateView.as_view(), name="snippet-tag-list"),
-    path("snippet-tags/<int:pk>/", views.SnippetTagDetailView.as_view(), name="snippet-tag-detail"),
-
     # FavoriteLikes
     path("favorites/", views.FavoriteLikeListCreateView.as_view(), name="favorite-list"),
     path("favorites/<str:pk>/", views.FavoriteLikeDetailView.as_view(), name="favorite-detail"),

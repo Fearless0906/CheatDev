@@ -38,3 +38,18 @@ export interface authState {
   error: string | null;
   success: boolean;
 }
+
+export type CheatSheets = {
+  id: string;
+  title: string;
+  description: string;
+  user_id?: string;
+  langauge_id: string; // ❌ should be language_id
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type Language = {
+  id: string;
+  name: string;
+};

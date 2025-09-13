@@ -1,11 +1,11 @@
 from rest_framework import generics
 from .models import (
     Language, CheatSheet, Snippet,
-    Tag, SnippetTag, FavoriteLike
+    Tag, FavoriteLike
 )
 from .serializers import (
     LanguageSerializer, CheatSheetSerializer,
-    SnippetSerializer, TagSerializer, SnippetTagSerializer,
+    SnippetSerializer, TagSerializer,
     FavoriteLikeSerializer
 )
 
@@ -56,20 +56,6 @@ class TagListCreateView(generics.ListCreateAPIView):
 class TagDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-
-
-# ---------------------------
-# SnippetTag Views
-# ---------------------------
-class SnippetTagListCreateView(generics.ListCreateAPIView):
-    queryset = SnippetTag.objects.all()
-    serializer_class = SnippetTagSerializer
-
-
-class SnippetTagDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = SnippetTag.objects.all()
-    serializer_class = SnippetTagSerializer
-
 
 # ---------------------------
 # FavoriteLike Views
