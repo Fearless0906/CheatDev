@@ -39,17 +39,51 @@ export interface authState {
   success: boolean;
 }
 
-export type CheatSheets = {
-  id: string;
-  title: string;
-  description: string;
-  user_id?: string;
-  langauge_id: string; // ❌ should be language_id
-  created_at?: string;
-  updated_at?: string;
-};
-
-export type Language = {
-  id: string;
+// Language interface
+export interface Language {
+  id: number;
   name: string;
-};
+  // created_at: string; // ISO string date
+  // updated_at: string;
+}
+
+// CheatSheet interface
+export interface CheatSheet {
+  id: number;
+  title: string;
+  description?: string;
+  user: User;
+  language: Language;
+  created_at: string;
+  updated_at: string;
+  snippets?: Snippet[];
+  favorites_count?: number;
+  tags: Tag[]; // Add tags to CheatSheet interface
+}
+
+// Tag interface
+export interface Tag {
+  id: number;
+  name: string;
+}
+
+// Snippet interface
+export interface Snippet {
+  title: string;
+  content: string;
+  explanation?: string;
+  user?: User;
+  cheat_sheet?: CheatSheet;
+  tags: Tag[];
+  // created_at: string;
+  // updated_at: string;
+}
+
+// FavoriteLike interface
+export interface FavoriteLike {
+  id: number;
+  user: User;
+  cheat_sheet: CheatSheet;
+  // created_at: string;
+  // updated_at: string;
+}
